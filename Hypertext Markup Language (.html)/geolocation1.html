@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <script>
+ 
+        function geolocate()
+        {
+            if (typeof(navigator.geolocation) !== 'undefined')
+            {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    alert(position.coords.latitude + ', ' + position.coords.longitude);
+                });
+            }
+            else
+            {
+                alert('Your browser does not support geolocation!');
+            }
+        }
+
+    </script>
+    <title>geolocation</title>
+  </head>
+  <body onload="geolocate()"></body>
+</html>

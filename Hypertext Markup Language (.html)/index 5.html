@@ -1,0 +1,85 @@
+<!--
+
+index.html
+
+David J. Malan
+malan@harvard.edu
+
+Demonstrates jQuery Mobile.
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css">
+    <meta name="viewport" content="width=device-width">
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+    <title>CSCI S-76</title> 
+  </head> 
+  <body> 
+
+    <div data-role="page" id="menu">
+
+      <div data-role="header" data-theme="b">
+        <h1>CSCI S-76</h1>
+      </div>
+
+      <div data-role="content">   
+        <ul data-role="listview" data-theme="c">
+          <li><a href="#lectures">Lectures</a></li>
+          <li><a href="http://cdn.cs76.net/2013/summer/lectures/0/syllabus.pdf" rel="external">Syllabus</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div data-role="page" id="lectures">
+
+      <div data-role="header" data-theme="b">
+        <h1>Lectures</h1>
+      </div>
+
+      <div data-role="content">   
+        <ul data-role="listview" data-theme="c">
+          <li><a href="#lecture0">Lecture 0</a></li>
+          <li><a href="#lecture1">Lecture 1</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div data-role="page" id="lecture0">
+
+      <div data-role="header" data-theme="b">
+        <h1>Lecture 0</h1>
+      </div>
+
+      <div data-role="content">   
+        <ul data-role="listview" data-theme="c">
+          <li><a href="http://cdn.cs76.net/2013/summer/lectures/0/slides0.pdf" rel="external">Slides</a></li>
+          <li><a href="http://cdn.cs76.net/2013/summer/lectures/0/lecture0.mp4" rel="external">Video</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div data-role="page" id="lecture1">
+
+      <div data-role="header" data-theme="b">
+        <h1>Lecture 1</h1>
+      </div>
+
+      <div data-role="content">   
+        <ul data-role="listview" data-theme="c">
+          <li><a href="http://cdn.cs76.net/2013/summer/lectures/1/slides1.pdf" rel="external">Slides</a></li>
+          <li><a href="http://cdn.cs76.net/2013/summer/lectures/1/lecture1.mp4" rel="external">Video</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </body>
+</html>

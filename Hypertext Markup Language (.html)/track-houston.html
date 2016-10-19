@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<!--
+  Copyright (c) 2015 by Nick Gallimore
+  All rights reserved.
+  -->
+<html>
+
+  <!-- start of header -->
+  <head>
+    
+    <!-- meta data -->
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8">
+    <meta name="description" content="Track Times">
+    
+
+    <!-- screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <!-- title  -->
+    <title>Track-Houston</title>
+    
+
+    <!-- css stylesheets -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+
+    <!-- javascripts -->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.5.0.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="track-houston.js"></script>
+  </head>
+
+  <!-- start of body -->
+  <body ng-app="TrackHouston">
+
+    <!-- this is only shown when currentUser is unknown (aka the variable currentUser == nil ) -->
+    <div ng-hide="currentUser">
+      <form ng-show="scenario == 'Log in'">
+        <h2>Log in</h2>
+
+        <!-- TODO make these into labels for each input -->
+        Username:<input type="text" ng-model="user.username" /><br /> 
+        Password:<input type="password" ng-model="user.password" /><br />
+        
+        <!-- when this button is clicked, it runs the logIn function, this was borrowed code, to access the elements of the form, since the function logIn has a parameter called "form" we pass in the varaible 'user' as the parameter [this is where I thought the variable 'user' was the ID of the form, but it is not, you can do that as well, but for some reason the function says 'form' as the name of the variable, see track-houston.js, in other words idfk what the ng-model="user.username" is, at first I thought it was a form but now I guess its an AngularJS  ng-model, one of equivalence to that of the "user" class in the parse database (our main api we post data to ATM until we setup NodeJS backend-server (or google Go) -->  <!-- o_o I fking hate javascript and html o.O -->
+        <button ng-click="logIn(user)">Log in</button>
+
+      </form>
+    </div>
+
+    <div ng-show="currentUser">
+      <div data-role="page" id="pageone">
+        <div data-role="header">
+          <h1>Welcome to Track-Houston!</h1>
+        </div>
+        <div data-role="tabs">
+          <div id="one" class="ui-content">
+            <h1>Welcome {{currentUser.get('username')}}</h1>
+            <p> You have been successfully logged in</p>
+            <button ng-click="logOut(user)">Log out</button>
+          </div>
+
+          <div data-role="navbar">
+            <ul>
+              <li><a href="#season" data-theme="a" data-ajax="true">Manage Time(s)</a></li>
+              <li><a href="#notes" data-theme="a" data-ajax="false">Notes</a></li>
+              <li><a href="#roster" data-theme="a" data-ajax="false">Settings</a></li>
+
+
+            </ul>
+          </div>
+
+          <!-- Form to enter roster data -->
+          <div id="roster" class="ui-content">
+            <form method="post" id="coachForm">
+              <h1>Coaching Staff Inputs</h1>
+              <!-- coach's full name --> <label for="fullname">Full name:</label>    
+              <input type="text" name="fullname" id="coachForm-fullname">
+              <!-- coach's position --> <label for="coachposition">Position:</label>    
+              <input type="text" name="coachposition" id="coachForm-position">   
+              <!-- coach's homesite --> <label for="homesite">Home site:</label>
+              <input type="text" name="Hsite" id="coachForm-homesite">
+              <!-- submit button for coach input form -->
+              <button ng-click="createCoach()" type="submit" data-inline="true" value="Submit">Create Coach</button>
+              {{createCoachSuccess}}
+
+            </form>
+
+            <form method="post" id="athleteForm">
+              <h1>Athlete Inputs</h1>
+              <label for="fullname">Full name:</label>
+              <input type="text" name="fullname" id="fullname">       
+              <label for="fullname">Parent's name:</label>
+              <input type="text" name="parentsname" id="parentsname">       
+              <label for="bday">Date of Birth:</label>
+              <input type="date" name="bday" id="bday">
+              <label for="practice">Practice site:</label>
+              <input type="text" name="Psite" id="practicesite">    
+              <button ng-click="submitAthleteForm()" type="submit" data-inline="true" value="Submit">Create Athlete</button>
+            </form>
+          </div>
+          <div id="notes" class="ui-content">
+            <h1>Create New Note</h1>
+            <label for="searchStudentsNoteInput">Search for a student by name:</label>
+            <input type="search" name="searchStudentsNoteInput" id="searchStudentsNoteInput">
+            <div data-role="fieldcontain">
+              <textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+            </div>
+            <button ng-click="submitNoteForm()" type="submit" data-inline="true" value="Submit">Submit</button>
+          </div>
+          <div id="season" class="ui-content">
+              <!-- Div to enter run data -->
+              <h1>Input New Run</h1>
+              <form id="runForm" method="post"> <!-- start of runForm -->
+                
+                <!-- Date -->
+                <label for="date">Event Date:</label>
+                <input type="date" data-clear-btn="false" name="date" id="date" value="">
+                
+                <!-- Event -->
+                <fieldset class="ui-field-contain">
+                  <label for="event">Select Event</label>
+                  <select name="event" id="event">
+                    <option value="100m">100 Meters</option>
+                    <option value="200m">200 Meters</option>
+                    <option value="400m">400 Meters</option>
+                    <option value="1mi">1 Mile</option>
+                    <option value="2mi">2 Miles</option>
+                    <option value="other">Other</option>  <!--TODO if "other" is selected redirect to "create event" link -->
+                  </select>
+                </fieldset>
+
+                <!-- Name -->
+                <fieldset class="ui-field-contain">
+                  <label for="event">Select Athlete</label>
+                  <select name="name" id="name">
+                    <option value="Maria">Maria</option>
+                    <option value="Watson">Watson</option>
+                    <option value="Carmello">Carmello</option>
+                    <option value="other">Other</option>  <!--TODO if "other" is selected redirect to "create user" link -->
+                  </select>
+                </fieldset>
+
+                <!-- Submit button -->
+                <label>Time:</label>
+                <input type="number" name="time" id="time" placeholder="Decimal" ng-model="myDecimal" step="any" />
+                <input ng-click="submitRunForm()" type="submit" data-inline="true" value="Submit New Time">
+              </form>
+            </div>
+              <table data-role="table" id="runTable" data-mode="" class="ui-body-d ui-shadow table-stripe ui-responsive" data-column-btn-theme="b" data-column-btn-text="Columns to display..." data-column-popup-theme="a">
+                <thead class="ui-bar-d">
+                  <th class="label" data-priority="2">Last Name</th>
+                  <th class="label" data-priority="1">Score</th>
+                  <th class="label" data-priority="4">Event</th>
+                  <th class="label" data-priority="3">Date</th>
+                </thead>
+            </table>
+            {{createRunTable()}}
+            <script>$( ".selector" ).table-columntoggle( "refresh" );</script>
+
+          <!-- settings div -->
+          <div id="settings" class="ui-content">
+          </div>
+
+        </div> <!-- end of main content -->
+
+        <!-- footer -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false" class="jqm-footer">
+          <p>Copyright 2015 Virtual Theologies</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            $('#demo').submit(function() {
+                alert('hello, ' + document.getElementById('name').value + '!');
+                return false;
+            });
+        });
+
+    </script>
+    <title>dom</title>
+  </head>
+  <body>
+
+    <form id="demo">
+      <input id="name" placeholder="Name" type="text"/>
+      <input type="submit"/>
+    </form>
+
+  </body>
+
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <title>dom</title>
+  </head>
+  <body>
+
+    <form id="demo">
+      <input id="name" placeholder="Name" type="text"/>
+      <input type="submit"/>
+    </form>
+
+    <script>
+
+        document.getElementById('demo').onsubmit = function() {
+            alert('hello, ' + document.getElementById('name').value + '!');
+            return false;
+        };
+
+    </script>
+
+  </body>
+
+</html>

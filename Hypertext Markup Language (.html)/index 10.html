@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <center>
+        <! - TITLE SHOWN IN BROWSER ->
+            <title> Nicholas F. Gallimore </title>
+        <! - LINK TO EXTERNAL STYLE SHEET ->
+            <link rel = "stylesheet" type = "text/css" href = "style.css">
+        <!- HEADER TEXT ->
+            <h1>
+                The Website of Nicholas F. Gallimore
+            </h1>
+        </center>
+    </head>
+    <body onload = "greet()">
+        <script>
+            function greet()
+            {
+                if (typeof(localStorage) !== 'undefined')
+                {
+                    if (typeof(localStorage['counter']) === 'undefined')
+                    {
+                        localStorage['counter'] = 0;
+                    }
+                    alert('You have visited ' + localStorage['counter'] + ' time(s) before!');
+                    localStorage['counter']++;
+                }
+                else
+                {
+                    alert('Your browser does not support localStorage!');
+                }
+            }
+        </script>
+        <center>
+        <!- BANNER ->
+            <div id = banner> <img src = banner.jpeg /img> </div>
+        <!- NAVIGATION MENU ->
+            <div id = menu>
+                <h3>
+                <!- HOME ->
+                    <a href = "index.html"> Home</a>
+                <!- RESUME ->
+                    <a href = "resume.html"> Resume</a>
+                <!- LINKS ->
+                    <a href = "links.html"> Links </a>
+                </h3>
+            </div>
+        </center>
+    </body>
+</html>

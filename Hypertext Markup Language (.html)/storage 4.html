@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <script>
+ 
+        function greet()
+        {
+            if (typeof(localStorage) !== 'undefined')
+            {
+                if (typeof(localStorage['counter']) === 'undefined')
+                {
+                    localStorage['counter'] = 0;
+                }
+                alert('You have visited ' + localStorage['counter'] + ' time(s) before!');
+                localStorage['counter']++;
+            }
+            else
+            {
+                alert('Your browser does not support localStorage!');
+            }
+        }
+
+    </script>
+    <title>storage</title>
+  </head>
+  <body onload="greet()"></body>
+</html>

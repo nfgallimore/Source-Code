@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="l10n_output.xsd" locale="enUS">
+  <e id="0">In Menus</e>
+  <e id="1">Tutorial</e>
+  <e id="2">Campaign</e>
+  <e id="3">Custom Game</e>
+  <e id="4">Challenge Mission</e>
+  <e id="5">Lobby</e>
+  <e id="6">Custom</e>
+  <e id="7">Arcade</e>
+  <e id="8">Readying - $0x10017</e>
+  <e id="9">Readying Ranked Solo</e>
+  <e id="10">Readying Ranked Team</e>
+  <e id="11">Searching - $0x10017</e>
+  <e id="12">Playing - $0x10017</e>
+  <e id="13">Versus A.I. - $0x10017</e>
+  <e id="14">Training - $0x10017</e>
+  <e id="15">Unranked - $0x10017</e>
+  <e id="16">Ranked - $0x10017</e>
+  <e id="17">Replay</e>
+  <e id="18">Editor</e>
+  <e id="19">Browsing Shop</e>
+  <e id="20">Score Screen</e>
+  <e id="21">Replay Lobby</e>
+</locale>

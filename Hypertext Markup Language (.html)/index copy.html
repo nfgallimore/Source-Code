@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>TrackTeam</title>
+  <meta name="description" content="TrackTeam">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="file:///Users/nickgallimore/Desktop/parse-js-blank/css/styles.css">
+  <script type="text/javascript" src="./TrackTeam_files/jquery.min.js"></script>
+  <script type="text/javascript" src="./TrackTeam_files/parse-1.5.0.min.js"></script>
+</head>
+<body>
+  <div id="main">
+    <center>
+      <font color="white">
+        <h1>TRACKR</h1><br><br>
+      </font>
+      <font color="white" <form="">
+        Name: <input type="text" name="name"><br>
+        Time: <input type="text" name="currentTimeBeingAdded"><br>
+        Distance: <input type="text" name="currentDistanceBeingAdded"><br>
+        Coach Notes: <input type="text" name="coachNotes"><br>
+        Notes: <input type="text" name="studentNotes"><br>
+        <input type="submit" name="mysubmit" value="Update">
+      </font>
+  </div>
+  <script type="text/javascript">
+    Parse.initialize("h3dceN04OZ7Rw0vfyMmZ9Wk7XaIvkBfxelIR9rF8", "15Necq8FajiBJPHe9CIDLOG0RHoSHpmQATUUpWRu");    
+    var Student = Parse.Object.extend("Student");
+    var student = new Student();
+      student.save({foo: "bar"}, {
+      success: function(object) {
+        $(".success").show();
+      },
+      error: function(model, error) {
+        $(".error").show();
+      }
+    });
+  </script>
+</body></html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="l10n_output.xsd"
+  locale="enUS">
+
+  <e id="50061">Hero League</e>
+  <e id="50081">Team League</e>
+  <e id="50001">Quick Match</e>
+  <e id="50041">Practice</e>
+  <e id="50021">Cooperative</e>
+</locale>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html ng-app="track-houston">
+<head>
+	<meta name="robots" content="noindex">
+	<meta charset="utf-8">
+	<meta name="description" content="Track Times">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
+	<link rel="stylesheet" href="/stylesheets/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/images/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+	<link rel="manifest" href="/images/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	<script src="/javascripts/jquery.tablesorter.js"></script>
+	<script src="/javascripts/parse-1.5.0.min.js"></script>
+	<script src="/javascripts/jquery-1.11.3.min.js"></script>
+	<script src="/javascripts/jquery.mobile-1.4.5.min.js"></script>
+	<script src="/javascripts/angular.min.js"></script>
+	<script src="/javascripts/track-houston.js" id="jsbin-javascript"></script>
+</head>
+<body ng-controller="TrackHoustonCtrl">
+	<!-- shown when user is logged in-->
+	<div ng-show="currentUser">
+		<div id="page" data-role="page">
+			<div data-role="header" id="customHeader">
+				<h1>Welcome to Track-Houston!</h1>
+			</div>
+			<div data-role="tabs">
+				<div id="one" class="ui-content">
+					<!-- admin navigation bar-->
+					<div ng-hide="!isAdmin" data-role="navbar">
+						<center>
+							<ul>
+								<li>
+									<a id="ManNoteSetBUTT" href="track-houston.herokuapp.com/#runTable" data-theme="a" data-ajax="false">View Data</a>
+								</li>
+								<br>
+								<li>
+									<a id="ManNoteSetBUTT" href="track-houston.herokuapp.com/#inputRun" data-theme="a" data-ajax="false">Input Times</a>
+								</li>
+								<br>
+								<li>
+									<a id="ManNoteSetBUTT" href="track-houston.herokuapp.com/#adminCreateAccount" data-theme="a" data-ajax="false">Create Account</a>
+								</li>
+								<br>
+								<li>
+									<a id="ManNoteSetBUTT" href="track-houston.herokuapp.com/#viewGrades" data-theme="a" data-ajax="false">View Grades</a>
+								</li>
+							</ul>
+						</center>
+					</div>
+					<div id="runTable" class="ui-content">
+						<table id="rundata" data-role="table" data-mode="" data-column-btn-theme="b" data-column-btn-text="Columns to" class="ui-body-d ui-shadow table-stripe ui-responsive table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Time</th>
+									<th>Event</th>
+									<th>Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

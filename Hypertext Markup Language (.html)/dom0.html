@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <script>
+
+        function greet()
+        {
+            alert('hello, ' + document.getElementById('name').value + '!');
+        }
+
+    </script>
+    <title>dom</title>
+  </head>
+  <body>
+
+    <form id="demo" onsubmit="greet(); return false;">
+      <input id="name" placeholder="Name" type="text"/>
+      <input type="submit"/>
+    </form>
+
+  </body>
+
+</html>

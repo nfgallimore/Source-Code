@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--
+  Copyright (c) 2015 by Nick Gallimore
+  All rights reserved.
+  -->
+<html>
+  <head>
+    
+    <!-- meta data -->
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8">
+    <meta name="description" content="Track Times">
+
+    <!-- screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- title  -->
+    <title>Track-Houston</title>
+
+    <!-- css stylesheets -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- javascripts -->
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.5.0.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <!-- css that is not in css file-->
+  </head>
+  <body ng-app="TrackHouston">
+    <div ng-hide="currentUser">
+      <form ng-show="scenario == 'Sign up'">
+        <h2>Sign up</h2>
+        Email:
+        <input type="email" ng-model="user.email" />
+        <br /> Username:
+        <input type="text" ng-model="user.username" />
+        <br /> Password:
+        <input type="password" ng-model="user.password" />
+        <br />
+        <button ng-click="signUp(user)">Sign up</button>
+        or <a href="#" ng-click='scenario="Log in"'>Log in</a>
+      </form>
+      <form ng-show="scenario == 'Log in'">
+        <h2>Log in</h2>
+        Username:
+        <input type="text" ng-model="user.username" />
+        <br /> Password:
+        <input type="password" ng-model="user.password" />
+        <br />
+        <button ng-click="logIn(user)">Log in</button>
+        or <a href="#" ng-click='scenario="Sign up"'>Sign up</a>
+      </form>
+    </div>
+    <div ng-show="currentUser">
+      <div data-role="page" id="pageone">
+        <div data-role="header">
+          <h1>Welcome to Track-Houston!</h1>
+        </div>
+        <div data-role="tabs">
+          <div id="one" class="ui-content">
+            <h1>Welcome {{currentUser.get('username')}}</h1>
+            <p> You have been successfully logged in</p>
+            <button ng-click="logOut(user)">Log out</button>
+          </div>
+          <div data-role="navbar">
+            <ul>
+              <li><a href="#createevent" data-theme="a" data-ajax="false">Create Event</a></li>
+              <li><a href="#account" data-theme="a" data-ajax="false">Create Account</a></li>
+              <li><a href="#run" data-theme="a" data-ajax="false">Input Runs</a></li>
+              <li><a href="#grades" data-theme="a" data-ajax="false">View Grades</a></li>
+              <li><a href="#search" data-theme="a" data-ajax="false">Search</a></li>
+              <li><a href="#roster" data-theme="a" data-ajax="false">Edit Roster</a></li>
+              <li><a href="#settings" data-theme="a" data-ajax="false">Benchmark Settings</a></li>
+              <li><a href="#email" data-theme="a" data-ajax="false">Email Team</a></li>
+              <li><a href="#notes" data-theme="a" data-ajax="false">Coach Notes</a></li>
+              <li><a href="#season" data-theme="a" data-ajax="false">View Season Data</a></li>
+            </ul>
+          </div>
+          <div id="roster" class="ui-content">
+            <!-- the form to post to roster -->
+            <form method="post">
+              <div class="ui-field-contain">
+                <div>
+                  <h1>Coaching Staff Inputs</h1>
+                  <label for="fullname">Full name:</label>
+                  <input type="text" name="fullname" id="fullname">       
+                  <label for="coachposition">Position:</label>
+                  <input type="text" name="coachposition" id="coachpos">       
+                  <label for="homesite">Home site:</label>
+                  <input type="text" name="Hsite" id="homesite">    
+                </div>
+                <input type="submit" data-inline="true" value="Submit">
+                <div>
+                  <h1>Athlete Inputs</h1>
+                  <label for="fullname">Full name:</label>
+                  <input type="text" name="fullname" id="fullname">       
+                  <label for="fullname">Parent's name:</label>
+                  <input type="text" name="parentsname" id="parentsname">       
+                  <label for="bday">Date of Birth:</label>
+                  <input type="date" name="bday" id="bday">
+                  <label for="practice">Practice site:</label>
+                  <input type="text" name="Psite" id="practicesite">    
+                </div>
+                <input type="submit" data-inline="true" value="Submit">
+              </div>
+            </form>
+          </div>
+          <div id="run" class="ui-content">
+            <h1>Input New Run</h1>
+            <!-- the form to post a new run -->
+            <form id="runForm" method="post" onsubmit="submitRunForm()">
+              <!-- Event drop down list -->
+              <fieldset class="ui-field-contain">
+                <label for="event">Select Event</label>
+                <select name="event" id="event">
+                  <option value="100m">100 Meters</option>
+                  <option value="200m">200 Meters</option>
+                  <option value="400m">400 Meters</option>
+                  <option value="1mi">1 Mile</option>
+                  <option value="2mi">2 Miles</option>
+                  <option value="other">Other</option>
+                  <!--TODO if "other" is selected redirect to "create event" link -->
+                </select>
+              </fieldset>
+              <label for="date">Event Date:</label>
+              <input type="date" data-clear-btn="false" name="date" id="date" value="">
+              <!-- Input for the student's name and the run time -->
+              <fieldset class="ui-field-contain">
+                <label for="event">Select Athlete</label>
+                <select name="name" id="name">
+                  <option value="Maria">Maria</option>
+                  <option value="Watson">Watson</option>
+                  <option value="Carmello">Carmello</option>
+                  <option value="other">Other</option>
+                  <!--TODO if "other" is selected redirect to "create user" link -->
+                </select>
+              </fieldset>
+              <!-- Submit button -->
+              <label>Time:</label>
+              <input type="text" id="time">
+              <input ng-click="submitTime(runForm)" type="submit" data-inline="true" value="Submit New Time">
+            </form>
+          </div>
+        <!-- settings div -->
+        <div id="settings" class="ui-content">
+        </div>
+        <!-- footer -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false" class="jqm-footer">
+          <p>Copyright 2015 Virtual Theologies</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      // javascript function for the graph
+      $(function () {
+        $('#container').highcharts({
+          title: {
+            text: 'Track Houston',
+            x: -20 //center
+          },
+          subtitle: {
+            text: 'Source: 100m Dash',
+            x: -20
+          },
+          xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          },
+          yAxis: {
+            title: {
+              text: 'Seconds'
+          },
+            plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+            }]
+          },
+          tooltip: {
+            valueSuffix: 'seconds'
+          },
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+          },
+          series: [
+            {name: 'Johnson',data: [10.0, 10.9, 9.5, 10.5, 10.2, 11.5, 11.2, 10.5, 11.3, 10.3, 11.9, 10.6]}, 
+            {name: 'Smith', data: [10, 10.8, 10.7, 11.3, 11.0, 10.87, 10.83, 10.1, 10.12, 11.1, 10.6, 10.5]}, 
+            {name: 'Johnson', data: [10.0, 10.9, 9.5, 10.5, 10.2, 11.5, 11.2, 10.5, 11.3, 10.3, 11.9, 10.6]}, 
+            {name: 'Smith', data: [10, 10.8, 10.7, 11.3, 11.0, 10.87, 10.83, 10.1, 10.12, 11.1, 10.6, 10.5]}, 
+            {name: 'Johnson', data: [10.0, 10.9, 9.5, 10.5, 10.2, 11.5, 11.2, 10.5, 11.3, 10.3, 11.9, 10.6]},
+            {name: 'Smith', data: [10, 10.8, 10.7, 11.3, 11.0, 10.87, 10.83, 10.1, 10.12, 11.1, 10.6, 10.5]},
+            {name: 'Johnson', data: [10.0, 10.9, 9.5, 10.5, 10.2, 10.87, 10.83, 10.1, 10.12, 11.1, 10.6, 10.5]},
+            {name: 'Smith', data: [10.20, 10.83, 10.74, 11.30, 11.03, 10.87, 10.83, 10.13, 10.12, 11.11, 10.61, 10.51]}
+          ]
+        });
+      });
+    </script>
+    <script id="jsbin-javascript">
+      Parse.initialize("sD4tDFzNyuas8Vg0VhoXeF5OSnLHMkJRLxuHOkUL", "ntKIRdfzedSkLFGaj99qrC2lG2VNOXdWIrONcVIP");
+      angular.module('TrackHouston', [])
+      .run(['$rootScope', function($scope) {
+        $scope.scenario = 'Sign up';
+        $scope.currentUser = Parse.User.current();
+        $scope.signUp = function(form) {
+          var user = new Parse.User();
+          user.set("email", form.email);
+          user.set("username", form.username);
+          user.set("password", form.password);
+          user.signUp(null, {
+            success: function(user) {
+              $scope.currentUser = user;
+              $scope.$apply();
+            },
+            error: function(user, error) {
+              alert("Unable to sign up:  " + error.code + " " + error.message);
+            }
+          });
+        };
+        $scope.submitTime = function(form) {
+            var Run = Parse.Object.extend("Run");
+            var run = new Run();
+            run.set("name") = form.name;
+            run.set("time") = form.time;
+            run.set("event") = form.event;
+            run.save(null, {
+              success: function(run) {
+                run.save();
+              }
+            })
+          };
+        $scope.logIn = function(form) {
+          Parse.User.logIn(form.username, form.password, {
+            success: function(user) {
+              $scope.currentUser = user;
+              $scope.$apply();
+            },
+            error: function(user, error) {
+              alert("Unable to log in: " + error.code + " " + error.message);
+            }
+          });
+        };
+        $scope.logOut = function(form) {
+          Parse.User.logOut();
+          $scope.currentUser = null;
+        };
+      }]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html ng-app="track-houston">
+   <head>
+      <meta name="robots" content="noindex">
+      <meta charset="utf-8">
+      <meta name="description" content="Track Times">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="google" content="notranslate">
+      <meta http-equiv="Content-Language" content="en">
+      <link rel="stylesheet" href="/stylesheets/jquery.mobile-1.4.5.min.css">
+      <link rel="stylesheet" href="/stylesheets/style.css">
+      <script src="/javascripts/parse-1.5.0.min.js"></script><script src="/javascripts/jquery-1.11.3.min.js"></script><script src="/javascripts/jquery.mobile-1.4.5.min.js"></script><script src="/javascripts/angular.min.js"></script><script src="/javascripts/track-houston.js" id="jsbin-javascript"></script><script src="/javascripts/jquery.tablesorter.js"></script>
+   </head>
+   <body>
+
+
+
+      
+      <!-- shown when user is not logged in-->
+      <div ng-hide="currentUser">
+         <form ng-show="scenario == 'Log in'">
+            <h2>Log in</h2>
+            Username:<input type="text" ng-model="user.username"><br>Password:<input type="password" ng-model="user.password"><br><br><button ng-click="logIn(user)">Log in</button><!--| First name:--><!--input(type='text', id='firstname')--><!--br--><!--| Last name:--><!--input(type='text', id='lastname')--><!--br--><!--| Birth year:--><!--input(type='text', id='birthyear')--><!--br--><!--br--><!--button(ng-click='createAccount(user)') Create Account-->
+         </form>
+      </div>
+      <!-- shown when user is logged in-->
+      <div ng-show="currentUser">
+         <div id="page" data-role="page">
+            <div data-role="header" id="customHeader">
+               <h1>Welcome to Track-Houston!</h1>
+            </div>
+            <div data-role="tabs">
+               <div id="one" class="ui-content">
+                  <!-- admin navigation bar-->
+                  <div ng-hide="!isAdmin" data-role="navbar">
+                     <center>
+                        <ul>
+                           <li><a id="ManNoteSetBUTT" href="#runTable" data-theme="a" data-ajax="false">View Data</a></li>
+                           <br>
+                           <li><a id="ManNoteSetBUTT" href="#inputRun" data-theme="a" data-ajax="false">Input Times</a></li>
+                           <br>
+                           <li><a id="ManNoteSetBUTT" href="#adminCreateAccount" data-theme="a" data-ajax="false">Create Account</a></li>
+                           <br>
+                           <li><a id="ManNoteSetBUTT" href="#viewGrades" data-theme="a" data-ajax="false">View Grades</a></li>
+                        </ul>
+                     </center>
+                  </div>
+                  <!-- coach navigation bar-->
+                  <div ng-hide="!isCoach" data-role="navbar">
+                     <ul>
+                        <li><a id="ManNoteSetBUTT" href="#runTable" data-theme="a" data-ajax="false">View Data</a></li>
+                        <li><a id="ManNoteSetBUTT" href="#inputRun" data-theme="a" data-ajax="false">Input Times</a></li>
+                        <li><a id="ManNoteSetBUTT" href="#coachCreateAccount" data-theme="a" data-ajax="false">Update Roster</a></li>
+                        <li><a id="ManNoteSetBUTT" href="#viewGrades" data-theme="a" data-ajax="false">View Grades</a></li>
+                     </ul>
+                  </div>
+                  <!-- logout button--><button ng-click="logOut(user)">Log out</button>
+               </div>
+               <!-- form for admin to create new accounts-->
+               <div id="adminCreateAccount" class="ui-content">
+                  <div ng-hide="!isAdmin" id="acctTypeRadios">
+                     <!-- student radio button--><input id="studentType" type="radio" name="accountType" ng-click="newAcctTypeUpdate()" value="student"><label for="studentType">Student</label><!-- coach radio button--><input id="coachType" type="radio" name="accountType" value="coach" ng-click="newAcctTypeUpdate()"><label for="coachType">Coach</label><!-- admin radio button--><input id="adminType" type="radio" name="accountType" value="admin" ng-click="newAcctTypeUpdate()"><label for="adminType">Admin</label><!-- form to create a new coach-->
+                     <form id="coachForm" ng-hide="!isAdmin || newAcctType !== 'coach'" method="post">
+                        <!-- create coach form header-->
+                        <h1>Create Coach Account</h1>
+                        <!-- new coach's first name--><label for="coachForm-fname">First name:</label><input id="coachForm-fname" type="text" name="coachForm-fname"><!-- new coach's last name--><label for="coachForm-lname">Last name:</label><input id="coachForm-lname" type="text" name="coachForm-lname"><!-- new coach's position--><label for="coachForm-position">Position:</label><input id="coachForm-position" type="text" name="coachForm-position"><!-- new coach's home site--><label for="coachForm-homesite">Home Site:</label><input id="coachForm-homesite" type="text" name="coachForm-homesite"><!-- new coach's email--><label for="coachForm-email">Email:</label><input id="coachForm-email" type="text" name="coachForm-email"><!-- submit button for coach input form--><button ng-click="createCoach()" type="submit" data-inline="true" value="Submit">Create Coach</button><!-- success-message upon successful creation-->{{createCoachSuccess}}
+                     </form>
+                     <!-- form to create a new admin-->
+                     <form id="adminForm" ng-show="newAcctType=='admin'" ng-hide="!isAdmin || newAcctType !== 'admin'" method="post">
+                        <!-- create admin form header-->
+                        <h1>Create Admin Account</h1>
+                        <!-- new admin's first name--><label for="fname">First name:</label><input id="adminForm-fname" type="text" name="adminForm-fname"><!-- new admin's last name--><label for="lname">Last name:</label><input id="adminForm-lname" type="text" name="adminForm-lname"><!-- new admin's email address--><label for="email">Email:</label><input id="adminForm-email" type="text" name="adminForm-email"><!-- submit button for coach input form--><button ng-click="createAdmin()" type="submit" data-inline="true" value="Submit">Create Admin</button><!-- success-message upon successful creation-->{{createAdminSuccess}}
+                     </form>
+                     <!-- form to create a new student-->
+                     <form id="studentForm-admin" ng-show="newAcctType=='student'" ng-hide="!isStudent" method="post">
+                        <!-- create student form header-->
+                        <h1>Create Student Account</h1>
+                        <!-- new student's first name--><label for="studentForm-fname">First name:</label><input id="studentForm-fname" type="text" name="studentForm-fname"><!-- new student's last name--><label for="studentForm-lname">Last name:</label><input id="studentForm-lname" type="text" name="studentForm-lname"><!-- new student's parent's name--><label for="studentForm-parentName">Parent full name:</label><input id="studentForm-parentName" type="text" name="studentForm-parentName"><!-- new student's birth year--><label for="studentForm-birthYear">Birth year:</label><input id="studentForm-birthYear" type="studentForm-birthYear" name="studentForm-birthYear"><!-- new student's practice site--><label for="studentForm-practiceSite">Practice site:</label><input id="studentForm-practiceSite" type="text" name="studentForm-practiceSite"><!-- submit button for student input form--><button ng-click="createStudent()" type="submit" data-inline="true" value="Submit">Create Account</button><!-- success-message upon successful creation-->{{createStudentSuccess}}
+                     </form>
+                  </div>
+               </div>
+               <!-- div for coach's create account (a.k.a. update roster)-->
+               <div id="coachCreateAccount" class="ui-content">
+                  <div ng-hide="!isCoach">
+                     <!-- form to create a new student-->
+                     <form id="studentForm-coach" , method="post">
+                        <!-- create student form header-->
+                        <h1>Create Student Account</h1>
+                        <!-- new student's first name--><label for="studentForm-fname-coach">First name:</label><input id="studentForm-fname" type="text" name="studentForm-fname-coach"><!-- new student's last name--><label for="studentForm-lname-coach">Last name:</label><input id="studentForm-lname" type="text" name="studentForm-lname-coach"><!-- new student's parent's name--><label for="studentForm-parentName-coach">Parent's full name:</label><input id="studentForm-parentName" type="text" name="studentForm-parentName-coach"><!-- new student's birth year--><label for="studentForm-birthYear-coach">Birth year:</label><input id="studentForm-birthYear" type="studentForm-birthYear-coach" name="studentForm-birthYear-coach"><!-- new student's practice site--><label for="studentForm-practiceSite">Practice site:</label><input id="studentForm-practiceSite" type="text" name="studentForm-practiceSite"><!-- submit button for student input form--><button ng-click="submitStudentForm()" type="submit" data-inline="true" value="Submit">Create Account</button><!-- success-message upon successful creation-->{{createStudentSuccess}}
+                     </form>
+                  </div>
+               </div>
+               <div id="runTable" class="ui-content">
+                  <table id="rundata" data-role="table" data-mode="" data-column-btn-theme="b" data-column-btn-text="Columns to" class="ui-body-d ui-shadow table-stripe ui-responsive table">
+                     <thead>
+                        <tr>
+                           <th>Name</th>
+                           <th>Time</th>
+                           <th>Event</th>
+                           <th>Date</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr></tr>
+                     </tbody>
+                  </table>
+               </div>
+               <div id="viewGrades" class="ui-content">
+                  <table id="gradeData" data-role="table" data-mode="" data-column-btn-theme="b" data-column-btn-text="Columns to" class="ui-body-d ui-shadow table-stripe ui-responsive table">
+                     <thead>
+                        <tr>
+                           <th ts-criteria="Name">Name</th>
+                           <th ts-criteria="Grade 1">Grade 1</th>
+                           <th ts-criteria="Grade 2">Grade 2</th>
+                           <th ts-criteria="Grade 3">Grade 3</th>
+                           <th ts-criteria="Grade 4">Grade 4</th>
+                           <th ts-criteria="Grade 5">Grade 5</th>
+                        </tr>
+                     </thead>
+                  </table>
+               </div>
+               <div id="gradeInput" class="ui-content">
+                  <div ng-hide="!isStudent">
+                     <!-- class 1-->
+                     <h1>Grade Input</h1>
+                     <label for="class1">What is the name of your first class?</label><input id="class1" type="text" name="class1"><label for="grade1">What is your current grade in it?</label><input id="grade1" type="text" name="grade1"><!-- class 2--><label for="class2">What is the name of your second class?</label><input id="class2" type="text" name="class2"><label for="grade2">What is your current grade in it?</label><input id="grade2" type="text" name="grade2"><!-- class 3--><label for="class3">What is the name of your third class?</label><input id="class3" type="text" name="class3"><label for="grade3">What is your current grade in it?</label><input id="grade3" type="text" name="grade3"><!-- class 4--><label for="class4">What is the name of your fourth class?</label><input id="class4" type="text" name="class4"><label for="grade4">What is your current grade in it?</label><input id="grade4" type="text" name="grade4"><!-- class 5--><label for="class5">What is the name of your fifth class?</label><input id="class5" type="text" name="class5"><label for="grade5">What is your current grade in it?</label><input id="grade5" type="text" name="grade5"><!-- submit button--><button ng-click="submitGradeForm()" type="submit" data-inline="true" value="Submit">Enter Grades</button>
+                  </div>
+               </div>
+               <div id="inputRun" class="ui-content">
+                  <div ng-hide="isStudent">
+                     <!-- Div to enter run data-->
+                     <h1>Input New Run</h1>
+                     <form id="runForm" method="post">
+                        <!-- start of runForm--><!-- Date--><label for="date">Event Date:</label><input id="datepicker1" type="date" data-clear-btn="false" name="date" val="Thu Oct 08 2015 10:42:13 GMT-0500 (CDT)"><!-- Event-->
+                        <fieldset class="ui-field-contain">
+                           <label for="event">Select Event</label>
+                           <select id="event" name="event">
+                              <option value="100m">100 Meters</option>
+                              <option value="200m">200 Meters</option>
+                              <option value="400m">400 Meters</option>
+                              <option value="1mi">1 Mile</option>
+                              <option value="2mi">2 Miles</option>
+                              <option value="other">Other</option>
+                              <!-- TODO if "other" is selected redirect to "create event" link-->
+                           </select>
+                        </fieldset>
+                        <!-- Name-->
+                        <fieldset class="ui-field-contain"><label for="name">Select Athlete</label><select id="name" name="name"></select></fieldset>
+                        <!-- Submit button--><label>Time:</label><input id="time" type="number" name="time" placeholder="Decimal" ng-model="myDecimal" step="any"><input ng-click="submitRunForm()" type="submit" data-inline="true" value="Submit New Time">
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

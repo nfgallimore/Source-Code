@@ -1,0 +1,66 @@
+<!--
+
+ajax3.html
+
+Gets stock quote from Yahoo Finance via YQL using JSONP with jQuery.
+
+David J. Malan
+malan@harvard.edu
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script>
+
+        /**
+         * void
+         * quote()
+         *
+         * Gets a quote.
+         */
+        function quote()
+        {
+            // construct URL
+            var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20columns%20%3D%20'price'%20and%20url%20%3D%20'http%3A%2F%2Fdownload.finance.yahoo.com%2Fd%2Fquotes.csv%3Ff%3Dl1%26s%3D" + document.getElementById("symbol").value + "'&format=json&callback=handler";
+
+            // get quote via JSONP
+            $.ajax({
+                dataType: 'jsonp',
+                url: url
+            });
+        }
+
+        /**
+         * void
+         * handler(response)
+         *
+         * Handles the JSONP response.
+         */
+        function handler(response)
+        {
+            if (response.query.count === 1)
+            {
+                alert(response.query.results.row.price);
+            }
+            else
+            {
+                alert("Error in JSONP response!");
+            }
+        }
+
+    </script>
+    <title>ajax</title>
+  </head>
+  <body>
+    <form onsubmit="quote(); return false;">
+      Symbol: <input autocomplete="off" id="symbol" type="text"/>
+      <br/><br/>
+      <input type="submit" value="Get Quote"/>
+    </form>
+  </body>
+</html>

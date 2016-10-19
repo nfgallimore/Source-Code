@@ -1,0 +1,12 @@
+HTTrack3.46+htsswf+htsjava launched on Thu, 29 Nov 2012 00:28:07 at www.devitis.com +*.png +*.gif +*.jpg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2010], %s -->" -%l "en, en, *" www.devitis.com -O1 "C:\Users\Nicholas\Documents\Virtual Theologies\Web Development\Dreamweaver\Web Sites\www.devitis.com" +*.png +*.gif +*.jpg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+00:30:02	Error: 	"Not Found" (404) at link www.devitis.com/tourimage/default.gif (from www.devitis.com/devitis.asp?get=weekly)
+
+HTTrack Website Copier/3.46 mirror complete in 4 minutes 37 seconds : 191 links scanned, 189 files written (6743399 bytes overall) [6788386 bytes received at 24506 bytes/sec]
+(1 errors, 0 warnings, 0 messages)
