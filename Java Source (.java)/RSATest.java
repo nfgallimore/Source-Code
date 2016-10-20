@@ -4,6 +4,7 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
+// Test is not working properly. -33 - 31 is returning -98.?!? 
 public class RSATest {
 
 	// max + max = maxLong = 2^63 - 1
@@ -23,7 +24,7 @@ public class RSATest {
 		rand.nextLong();
 		// Random Test
 		System.out.println("\nBeginning tests with random longs.\n\n");
-		for (int i = 0; i < 1000 && !error; i++) {
+		for (int i = 0; i < 100000 && !error; i++) {
 			addTest(quiet, randLong(), randLong());
 			subTest(quiet, randLong(), randLong());
 		}
@@ -31,7 +32,7 @@ public class RSATest {
 
 		// Fixed Test
 		System.out.println("Beginning tests with fixed 4 and 3 bit longs covering all cases with the variables: length (9 or 10 digits), sign (positive or negative), values (9, 1, or 0), and top/bottom (augend/addend and minuend or subtrahend).\n\n");
-		int[] intArr = {9999,9999,1111,1111,-9999,-9999,-1111,-1111,-9999,9999,-1111,1111,9999,-9999,1111,-1111,9999,1111,-9999,-1111,9999,-1111,-9999,1111,1111,9999,-1111,-9999,-1111,9999,1111,-9999,9999,0000,-9999,0000,0000,9999,0000,-9999,0000,0000,-0000,-0000,-0000,0000,0000,-0000,999,9999,111,1111,-999,-9999,-111,-1111,-999,9999,-111,1111,999,-9999,111,-1111,999,1111,-999,-1111,999,-1111,-999,1111,111,9999,-111,-9999,-111,9999,111,-9999,999,0000,-999,0000,000,9999,000,-9999,000,0000,-000,-0000,-000,0000,000,-0000,9999,999,1111,111,-9999,-999,-1111,-111,-9999,999,-1111,111,9999,-999,1111,-111,9999,111,-9999,-111,9999,-111,-9999,111,1111,999,-1111,-999,-1111,999,1111,-999,9999,000,-9999,000,0000,999,0000,-999,0000,000,-0000,-000,-0000,000,0000,-000};
+		int[] intArr = {-33, 31, 9999,9999,1111,1111,-9999,-9999,-1111,-1111,-9999,9999,-1111,1111,9999,-9999,1111,-1111,9999,1111,-9999,-1111,9999,-1111,-9999,1111,1111,9999,-1111,-9999,-1111,9999,1111,-9999,9999,0000,-9999,0000,0000,9999,0000,-9999,0000,0000,-0000,-0000,-0000,0000,0000,-0000,999,9999,111,1111,-999,-9999,-111,-1111,-999,9999,-111,1111,999,-9999,111,-1111,999,1111,-999,-1111,999,-1111,-999,1111,111,9999,-111,-9999,-111,9999,111,-9999,999,0000,-999,0000,000,9999,000,-9999,000,0000,-000,-0000,-000,0000,000,-0000,9999,999,1111,111,-9999,-999,-1111,-111,-9999,999,-1111,111,9999,-999,1111,-111,9999,111,-9999,-111,9999,-111,-9999,111,1111,999,-1111,-999,-1111,999,1111,-999,9999,000,-9999,000,0000,999,0000,-999,0000,000,-0000,-000,-0000,000,0000,-000};
 		System.out.println(intArr[intArr.length - 3]);
 		LinkedList<Integer> intList = new LinkedList<Integer>();
 		for (int i = 0; i < intArr.length - 1; i++) {
@@ -55,6 +56,13 @@ public class RSATest {
 		BigInt randoBigInt2 = randBigInt(2);
 
 		System.out.println(randoBigInt1.getStr() + " + " + randoBigInt2.getStr() + " = " + randoBigInt1.add(randoBigInt2).getStr());
+
+		BigInt test1 = new BigInt("33");
+		test1.positive = false;
+		BigInt test2 = new BigInt("31");
+		test2.positive = true;
+
+		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
 
 		System.out.println("\nTest completed successfully! Exiting now!\n\n");
 

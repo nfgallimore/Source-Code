@@ -42,8 +42,8 @@ public class BigInt {
 		Iterator iterB = listReverse(b.ls).iterator();
 
 		if (!this.positive && b.positive) {
-			if (b.lessThan(this)) {
-				sum = this.subtract(b);
+			if (this.greaterThan(b)) {
+				sum = this.subtract(new BigInt(b.getStr()));
 				sum.positive = false;
 				return sum;
 			}
@@ -96,7 +96,6 @@ public class BigInt {
 		if (!this.positive && !b.positive) {
 			sum.positive = false;
 		}
-		sum.cleanZeroes();
 		return sum;
 	}
 
@@ -144,12 +143,17 @@ public class BigInt {
 			diff.ls.add(d);
 		}
 		diff.ls = listReverse(diff.ls);
-		diff.cleanZeroes();
+		cleanZeroes(diff.ls);
 		return diff;
 	}
 	private void cleanZeroes() {
 		while (this.ls.get(0) == 0) {
 			this.ls.removeFirst();
+		}
+	}
+	private void cleanZeroes(LinkedList<Long> list) {
+		while (list.get(0) == 0) {
+			list.removeFirst();
 		}
 	}
 	private long longPow(long a, long b) {
