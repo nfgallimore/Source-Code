@@ -26,6 +26,9 @@ public class BigInt {
 	public String getStr() {
 	    Iterator iter = this.ls.iterator();
 	    String str = "";
+	    if (!this.positive) {
+	    	str += '-';
+	    }
 	    while(iter.hasNext()){
 	        str += iter.next();
 	    }
@@ -37,39 +40,70 @@ public class BigInt {
 		BigInt sum = new BigInt("");
 		Iterator iterA = listReverse(this.ls).iterator();
 		Iterator iterB = listReverse(b.ls).iterator();
-		while (iterA.hasNext() || iterB.hasNext()) {
-			long j, k;
-			if (iterA.hasNext()) {
-				j = Long.valueOf(iterA.next().toString());
+
+		if (!this.positive && b.positive) {
+			if (b.lessThan(this)) {
+				sum = this.subtract(b);
+				sum.positive = false;
+				return sum;
 			}
 			else {
-				j = 0;
+				return b.subtract(this);
 			}
-			if (iterB.hasNext()) {
-				k = Integer.valueOf((String)iterB.next().toString());
-			}
-			else {
-				k = 0;
-			}
-			s = j + k + c;
-			if (s < BASE) {
-				c = 0;
-			}
-			else {
-				c = 1;
-				s -= BASE;
-			}
-			sum.ls.add(s);
+
 		}
-		sum.ls = listReverse(sum.ls);
+		else if (this.positive && !b.positive) {
+			if (this.lessThan(b)) {
+				sum = b.subtract(this);
+				sum.positive = false;
+				return sum;
+			}
+			else {
+				sum = this.subtract(b);
+				return sum;
+			}
+		}
+		else {
+			while (iterA.hasNext() || iterB.hasNext()) {
+				long j, k;
+				if (iterA.hasNext()) {
+					j = Long.valueOf(iterA.next().toString());
+				}
+				else {
+					j = 0;
+				}
+				if (iterB.hasNext()) {
+					k = Integer.valueOf((String)iterB.next().toString());
+				}
+				else {
+					k = 0;
+				}
+				s = j + k + c;
+				if (s < BASE) {
+					c = 0;
+				}
+				else {
+					c = 1;
+					s -= BASE;
+				}
+				sum.ls.add(s);
+			}
+			if (c != 0) {
+				sum.ls.add(c);
+			}
+			sum.ls = listReverse(sum.ls);
+		}
+		if (!this.positive && !b.positive) {
+			sum.positive = false;
+		}
+		sum.cleanZeroes();
 		return sum;
 	}
 
 	public Boolean positive = true;
-
 	public Boolean neg() {
-		this.positive = !positive;
-		return this.positive;
+		positive = !positive;
+		return positive;
 	}
 
 	public BigInt subtract(BigInt bInt) throws IOException {
@@ -77,37 +111,14 @@ public class BigInt {
 		BigInt diff = new BigInt("");
 		Iterator iterA = listReverse(this.ls).iterator();
 		Iterator iterB = listReverse(bInt.ls).iterator();
-		
-		Boolean cBigger;
-
-		if ((this.getStr().length() > bInt.getStr().length()) && (this.getStr().length() != bInt.getStr().length())) {
-			iterA = listReverse(this.ls).iterator();
-			iterB = listReverse(bInt.ls).iterator();
-		}
-		else if (this.getStr().length() == bInt.getStr().length()) {
-			for (int i = 0; i < this.getStr().length(); i++) {
-				char cDigit = this.getStr().charAt(i);
-				char dDigit = bInt.getStr().charAt(i);
-				if (cDigit != dDigit) {
-					if (cDigit < dDigit) {
-						cBigger = true;
-						iterA = listReverse(this.ls).iterator();
-						iterB = listReverse(bInt.ls).iterator();
-					}
-					else {
-						iterA = listReverse(bInt.ls).iterator();
-						iterB = listReverse(this.ls).iterator();
-						this.neg();
-					}
-				}
-			}
-		}
-		else {
-			iterA = listReverse(bInt.ls).iterator();
+		if (this.lessThan(bInt)) {
+			diff.neg();
+			iterA = iterB;
 			iterB = listReverse(this.ls).iterator();
-			this.neg();
+		} 
+		else {
+			diff.positive = true;
 		}
-
 		while (iterA.hasNext() || iterB.hasNext()) {
 			long j, k;
 			if (iterA.hasNext()) {
@@ -133,9 +144,14 @@ public class BigInt {
 			diff.ls.add(d);
 		}
 		diff.ls = listReverse(diff.ls);
+		diff.cleanZeroes();
 		return diff;
 	}
-	
+	private void cleanZeroes() {
+		while (this.ls.get(0) == 0) {
+			this.ls.removeFirst();
+		}
+	}
 	private long longPow(long a, long b) {
 		for (long i = 0; i < b; i++) {
 			a *= a;
@@ -154,5 +170,33 @@ public class BigInt {
 			revList.add(0, iter.next());
 		}
 		return revList;
+	}
+
+	public Boolean equal(BigInt b) {
+		return Objects.equals(this.getStr(), b.getStr());
+	}
+	// absolute value!
+	public Boolean lessThan(BigInt b) {
+		if (this.ls.size() < b.ls.size()) {
+			return true;
+		}
+		else if (this.ls.size() == b.ls.size()) {
+			for (int i = 0; i < this.ls.size(); i++) {
+				if (this.getStr().charAt(i) < b.getStr().charAt(i)) {
+					return true;
+				}
+				else if (this.getStr().charAt(i) > b.getStr().charAt(i)) {
+					return false;
+				}
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean greaterThan(BigInt b) {
+		return (!lessThan(b) && !equal(b));
 	}
 }
