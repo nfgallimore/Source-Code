@@ -24,7 +24,7 @@ public class RSATest {
 		rand.nextLong();
 		// Random Test
 		System.out.println("\nBeginning tests with random longs.\n\n");
-		for (int i = 0; i < 100000 && !error; i++) {
+		for (int i = 0; i < 1000 && !error; i++) {
 			addTest(quiet, randLong(), randLong());
 			subTest(quiet, randLong(), randLong());
 		}
