@@ -143,18 +143,25 @@ public class BigInt {
 			diff.ls.add(d);
 		}
 		diff.ls = listReverse(diff.ls);
-		cleanZeroes(diff.ls);
 		return diff;
 	}
-	private void cleanZeroes() {
+	private BigInt cleanZeroes() {
 		while (this.ls.get(0) == 0) {
 			this.ls.removeFirst();
 		}
+		return this;
 	}
 	private void cleanZeroes(LinkedList<Long> list) {
 		while (list.get(0) == 0) {
 			list.removeFirst();
 		}
+	}
+	public BigInt multiply(BigInt b) throws IOException {
+		BigInt product = new BigInt("");
+		for (BigInt i = b; !i.equal(new BigInt("0")); i = i.subtract(new BigInt("1"))) {
+			product = product.add(this);
+		}
+		return product;
 	}
 	private long longPow(long a, long b) {
 		for (long i = 0; i < b; i++) {
