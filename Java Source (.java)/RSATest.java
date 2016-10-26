@@ -31,9 +31,20 @@ public class RSATest {
 		System.out.println("Random long test was a success.\n\n");
 
 		// Fixed Test
-		System.out.println("Beginning tests with fixed 4 and 3 bit longs covering all cases with the variables: length (9 or 10 digits), sign (positive or negative), values (9, 1, or 0), and top/bottom (augend/addend and minuend or subtrahend).\n\n");
-		int[] intArr = {-33, 31, 9999,9999,1111,1111,-9999,-9999,-1111,-1111,-9999,9999,-1111,1111,9999,-9999,1111,-1111,9999,1111,-9999,-1111,9999,-1111,-9999,1111,1111,9999,-1111,-9999,-1111,9999,1111,-9999,9999,0000,-9999,0000,0000,9999,0000,-9999,0000,0000,-0000,-0000,-0000,0000,0000,-0000,999,9999,111,1111,-999,-9999,-111,-1111,-999,9999,-111,1111,999,-9999,111,-1111,999,1111,-999,-1111,999,-1111,-999,1111,111,9999,-111,-9999,-111,9999,111,-9999,999,0000,-999,0000,000,9999,000,-9999,000,0000,-000,-0000,-000,0000,000,-0000,9999,999,1111,111,-9999,-999,-1111,-111,-9999,999,-1111,111,9999,-999,1111,-111,9999,111,-9999,-111,9999,-111,-9999,111,1111,999,-1111,-999,-1111,999,1111,-999,9999,000,-9999,000,0000,999,0000,-999,0000,000,-0000,-000,-0000,000,0000,-000};
-		System.out.println(intArr[intArr.length - 3]);
+		System.out.println("Beginning tests with fixed 4 and 3 bit longs covering all cases with the variables: " +
+			"length (9 or 10 digits), sign (positive or negative), values (9, 1, or 0), and top/bottom" + 
+			"(augend/addend and minuend or subtrahend).\n\n");
+
+		int[] intArr = {-33, 31, 9999,9999,1111,1111,-9999,-9999,-1111,-1111,-9999,9999,-1111,1111,9999,-9999,1111,
+			-1111,9999,1111,-9999,-1111,9999,-1111,-9999,1111,1111,9999,-1111,-9999,-1111,9999,1111,-9999,9999,0000,
+			-9999,0000,0000,9999,0000,-9999,0000,0000,-0000,-0000,-0000,0000,0000,-0000,999,9999,111,1111,-999,-9999,
+			-111,-1111,-999,9999,-111,1111,999,-9999,111,-1111,999,1111,-999,-1111,999,-1111,-999,1111,111,9999,-111,
+			-9999,-111,9999,111,-9999,999,0000,-999,0000,000,9999,000,-9999,000,0000,-000,-0000,-000,0000,000,-0000,
+			9999,999,1111,111,-9999,-999,-1111,-111,-9999,999,-1111,111,9999,-999,1111,-111,9999,111,-9999,-111,9999,
+			-111,-9999,111,1111,999,-1111,-999,-1111,999,1111,-999,9999,000,-9999,000,0000,999,0000,-999,0000,000,-0000,
+			-000,-0000,000,0000,-000
+		};
+
 		LinkedList<Integer> intList = new LinkedList<Integer>();
 		for (int i = 0; i < intArr.length - 1; i++) {
 			intList.add(intArr[i]);
@@ -46,26 +57,68 @@ public class RSATest {
 				subTest(quiet, (long)i, (long)j);
 			}
 		}
-
-		System.out.println("Fixed long test was a success.\nTurning off quiet mode to print a random calculation for each operation to screen.\n\n");
-		quiet = false;
+		System.out.println("Fixed long test was a success."
+			+ "\nTurning off quiet mode to print a random calculation for each operation to screen.\n\n");
+//		quiet = false;
 		addTest(quiet, randLong(), randLong());
 		subTest(quiet, randLong(), randLong());
 
 		BigInt randoBigInt1 = randBigInt(2);
 		BigInt randoBigInt2 = randBigInt(2);
 
-		System.out.println(randoBigInt1.getStr() + " + " + randoBigInt2.getStr() + " = " + randoBigInt1.add(randoBigInt2).getStr());
-
-		BigInt test1 = new BigInt("33");
-		test1.positive = false;
-		BigInt test2 = new BigInt("31");
-		test2.positive = true;
-
-		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
+		System.out.println(randoBigInt1.getStr() + " + " + randoBigInt2.getStr() + 
+			" = " + randoBigInt1.add(randoBigInt2).getStr());
+		System.out.println("Performing the good ol' 33 test, verify visually!");
+		//ThirtyThreeTest();
 
 		System.out.println("\nTest completed successfully! Exiting now!\n\n");
+		BigInt bigassnum = randBigInt(1024);
+		BigInt bigassnum2 = randBigInt(1024);
+		System.out.println(bigassnum.getStr() + "\n\n" + bigassnum2.getStr() + "\n----------------------------------------------------\n" 
+			+ bigassnum.add(bigassnum2).getStr());
 
+	}
+	public static void ThirtyThreeTest() throws IOException {
+		BigInt test1 = new BigInt("-33");
+		BigInt test2 = new BigInt("31");
+		
+		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
+		System.out.println(test2.getStr() + " - " + test1.getStr() + " = " + test2.subtract(test1).getStr());
+
+		test1.positive = false;
+		test2.positive = false;
+		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
+		System.out.println(test2.getStr() + " - " + test1.getStr() + " = " + test2.subtract(test1).getStr());
+
+		test1.positive = true;
+		test2.positive = false;
+		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
+		System.out.println(test2.getStr() + " - " + test1.getStr() + " = " + test2.subtract(test1).getStr());
+
+		test1.positive = false;
+		test2.positive = true;
+		System.out.println(test1.getStr() + " - " + test2.getStr() + " = " + test1.subtract(test2).getStr());
+		System.out.println(test2.getStr() + " - " + test1.getStr() + " = " + test2.subtract(test1).getStr());
+
+		test1.positive = true;
+		test2.positive = true;
+		System.out.println(test1.getStr() + " + " + test2.getStr() + " = " + test1.add(test2).getStr());
+		System.out.println(test2.getStr() + " +" + test1.getStr() + " = " + test2.add(test1).getStr());
+
+		test1.positive = false;
+		test2.positive = false;
+		System.out.println(test1.getStr() + " + " + test2.getStr() + " = " + test1.add(test2).getStr());
+		System.out.println(test2.getStr() + " + " + test1.getStr() + " = " + test2.add(test1).getStr());
+		
+		test1.positive = true;
+		test2.positive = false;
+		System.out.println(test1.getStr() + " + " + test2.getStr() + " = " + test1.add(test2).getStr());
+		System.out.println(test2.getStr() + " + " + test1.getStr() + " = " + test2.add(test1).getStr());
+		
+		test1.positive = false;
+		test2.positive = true;
+		System.out.println(test1.getStr() + " + " + test2.getStr() + " = " + test1.add(test2).getStr());
+		System.out.println(test2.getStr() + " + " + test1.getStr() + " = " + test2.add(test1).getStr());
 	}
 	public static Long randLong() {
 		return (nextLong(new Random(), range) + MIN);
@@ -102,11 +155,13 @@ public class RSATest {
 		sumBigInt = augendBigInt.add(addendBigInt);
 
 		if (!Objects.equals(Long.toString(augendLong + addendLong), sumBigInt.getStr())) {
-			System.out.println("Program calculated: " + augendLong + " - " + addendLong + " = " + sumBigInt.getStr() + "\n When it should be " + (augendLong + addendLong));
+			System.out.println("Program calculated: " + augendLong + " - " + addendLong + " = " 
+				+ sumBigInt.getStr() + "\n When it should be " + (augendLong + addendLong));
 			err();
 		}
 		if (!quiet) {
-			System.out.println(augendBigInt.ls.toString() + "\n" + addendBigInt.ls.toString() + "\n" + "-----------------------------------");
+			System.out.println(augendBigInt.ls.toString() + "\n" + addendBigInt.ls.toString() + "\n" 
+				+ "-----------------------------------");
 				System.out.println(sumBigInt.getStr() + "\n");
 		}
 	}
@@ -128,11 +183,13 @@ public class RSATest {
 		diffBigInt = minuendBigInt.subtract(subtrahendBigInt);
 
 		if (!Objects.equals(Long.toString(minuendLong - subtrahendLong), diffBigInt.getStr())) {
-			System.out.println("Program calculated: " + minuendLong + " - " + subtrahendLong + " = " + diffBigInt.getStr() + "\nWhen it should have computed " + (minuendLong - subtrahendLong));
+			System.out.println("Program calculated: " + minuendLong + " - " + subtrahendLong + " = " 
+				+ diffBigInt.getStr() + "\nWhen it should have computed " + (minuendLong - subtrahendLong));
 			err();
 		}
 		if (!quiet) {
-			System.out.println(minuendBigInt.ls.toString() + "\n" + subtrahendBigInt.ls.toString() + "\n" + "-----------------------------------");
+			System.out.println(minuendBigInt.ls.toString() + "\n" + subtrahendBigInt.ls.toString() 
+				+ "\n" + "-----------------------------------");
 			System.out.println(diffBigInt.getStr() + "\n");
 		}
 	}

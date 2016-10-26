@@ -16,24 +16,33 @@ public class BigInt {
 			if (ch < 0) {
 				break;
 			}
-			else {
+			else if (ch != '-') {
 				ls.add(ch - 48);
 			}
 		}
 		stringReader.close();
+		if (s.length() > 0 && s.charAt(0) == '-') {
+			this.positive = false;
+			s = s.substring(1, s.length() - 1);
+		}
+		this.str = s;
 	}
+	public String str = "";
 
 	public String getStr() {
 	    Iterator iter = this.ls.iterator();
-	    String str = "";
+	    String s = "";
 	    if (!this.positive) {
-	    	str += '-';
+	    	s += '-';
 	    }
 	    while(iter.hasNext()){
-	        str += iter.next();
+	        s += iter.next();
 	    }
-	    return str;
+	    this.str = s;
+	    cleanStr();
+	    return this.str;
 	}
+	public Boolean positive = true;
 
 	public BigInt add(BigInt b) throws IOException {
 		long s = 0, c = 0;
@@ -41,8 +50,11 @@ public class BigInt {
 		Iterator iterA = listReverse(this.ls).iterator();
 		Iterator iterB = listReverse(b.ls).iterator();
 
+		// if this is negative and b is positive
 		if (!this.positive && b.positive) {
-			if (this.greaterThan(b)) {
+			// if absval of this is greater than absval of b
+			if (b.lessThan(this)) {
+				this.positive = true;
 				sum = this.subtract(new BigInt(b.getStr()));
 				sum.positive = false;
 				return sum;
@@ -54,6 +66,7 @@ public class BigInt {
 		}
 		else if (this.positive && !b.positive) {
 			if (this.lessThan(b)) {
+				b.positive = true;
 				sum = b.subtract(this);
 				sum.positive = false;
 				return sum;
@@ -96,10 +109,10 @@ public class BigInt {
 		if (!this.positive && !b.positive) {
 			sum.positive = false;
 		}
+		sum = sum.cleanZeroes();
 		return sum;
 	}
 
-	public Boolean positive = true;
 	public Boolean neg() {
 		positive = !positive;
 		return positive;
@@ -111,10 +124,20 @@ public class BigInt {
 		Iterator iterA = listReverse(this.ls).iterator();
 		Iterator iterB = listReverse(bInt.ls).iterator();
 		if (this.lessThan(bInt)) {
-			diff.neg();
+			diff.positive = false;
 			iterA = iterB;
 			iterB = listReverse(this.ls).iterator();
 		} 
+		else if (!this.positive && bInt.positive) {
+			this.positive = true;
+			diff = this.add(bInt);
+			diff.positive = false;
+			return diff;
+		}
+		else if (!this.positive && !bInt.positive) {
+			bInt.positive = true;
+			return this.add(bInt);
+		}
 		else {
 			diff.positive = true;
 		}
@@ -142,19 +165,45 @@ public class BigInt {
 			}
 			diff.ls.add(d);
 		}
+		if (this.lessThan(bInt)) {
+			diff.positive = false;
+		}
 		diff.ls = listReverse(diff.ls);
+		diff = diff.cleanZeroes();
 		return diff;
 	}
 	private BigInt cleanZeroes() {
-		while (this.ls.get(0) == 0) {
-			this.ls.removeFirst();
+		if (this.positive) {
+			while (this.ls.size() > 1 && this.ls.get(0) == 0) {
+				this.ls.removeFirst();
+			}
+		}
+		else {
+			while (this.ls.size() > 2 && this.ls.get(0) == 0) {
+				this.ls.removeFirst();
+			}
 		}
 		return this;
 	}
 	private void cleanZeroes(LinkedList<Long> list) {
-		while (list.get(0) == 0) {
+		while (list.size() > 1 && list.get(0) == 0) {
 			list.removeFirst();
 		}
+	}
+	private String cleanStr() {
+		String list = this.str;
+		Boolean negative = false;
+		if (list.length() > 0 && list.charAt(0) == '-') {
+			negative = true;
+		}
+		while (list.length() > 0 && (list.charAt(0) == '0' || list.charAt(0) == '-')) {
+			list = list.substring(1, list.length());
+		}
+		if (negative) {
+			list = '-' + list;
+		}
+		this.str = list;
+		return list;
 	}
 	public BigInt multiply(BigInt b) throws IOException {
 		BigInt product = new BigInt("");
@@ -174,7 +223,7 @@ public class BigInt {
 		return new BigInt("");
 	}
 	
-	public LinkedList listReverse(LinkedList list) {
+	private LinkedList listReverse(LinkedList list) {
 		Iterator iter = list.iterator();
 		LinkedList revList = new LinkedList<Long>();
 		while (iter.hasNext()) {
@@ -193,10 +242,11 @@ public class BigInt {
 		}
 		else if (this.ls.size() == b.ls.size()) {
 			for (int i = 0; i < this.ls.size(); i++) {
-				if (this.getStr().charAt(i) < b.getStr().charAt(i)) {
+				
+				if (this.ls.get(i) < b.ls.get(i)) {
 					return true;
 				}
-				else if (this.getStr().charAt(i) > b.getStr().charAt(i)) {
+				else if (this.ls.get(i) > b.ls.get(i)) {
 					return false;
 				}
 			}
