@@ -6,6 +6,7 @@ import java.io.*;
 
 public class Modulus {
 	public static void main(String[] args) {
+		//GCD gcd = new GCD(61, 7);
 		int a = 13;
 		int e = 27;
 		int m = 55;

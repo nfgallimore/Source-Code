@@ -2,9 +2,35 @@ import java.util.*;
 import java.lang.*;
 import java.io.StringReader;
 import java.io.*;
+import java.util.Random;
+import java.lang.Math;
+
+/* TODO 
+
+~/Source-Code/Java Source (.java)$ java GCD
+-0
+-5
+0
+~/Source-Code/Java Source (.java)$ java GCD
+-0
+4
+-0
+~/Source-Code/Java Source (.java)$ java GCD
+-0
+-1
+0
+~/Source-Code/Java Source (.java)$ java GCD
+-5
+-0
+
+*/
+
 public class BigInt {
 
 	public final long BASE = 10;
+	public final static long MAX = (long)Math.pow(2, 31) - 1;
+	public final static long MIN = 0;
+	public final static Long range = (MAX - MIN) + 1;
 
 	public LinkedList<Long> ls = new LinkedList<Long>();
 
@@ -23,7 +49,7 @@ public class BigInt {
 		stringReader.close();
 		if (s.length() > 0 && s.charAt(0) == '-') {
 			this.positive = false;
-			s = s.substring(1, s.length() - 1);
+			s = s.substring(1, s.length());
 		}
 		this.str = s;
 	}
@@ -173,15 +199,8 @@ public class BigInt {
 		return diff;
 	}
 	private BigInt cleanZeroes() {
-		if (this.positive) {
-			while (this.ls.size() > 1 && this.ls.get(0) == 0) {
-				this.ls.removeFirst();
-			}
-		}
-		else {
-			while (this.ls.size() > 2 && this.ls.get(0) == 0) {
-				this.ls.removeFirst();
-			}
+		while (this.ls.size() > 1 && this.ls.get(0) == 0) {
+			this.ls.removeFirst();
 		}
 		return this;
 	}
@@ -196,19 +215,22 @@ public class BigInt {
 		if (list.length() > 0 && list.charAt(0) == '-') {
 			negative = true;
 		}
-		while (list.length() > 0 && (list.charAt(0) == '0' || list.charAt(0) == '-')) {
+		while ((list.length() > 1 && list.charAt(0) == '0') || (list.length() > 2 && list.charAt(0) == '-')) {
 			list = list.substring(1, list.length());
-		}
-		if (negative) {
-			list = '-' + list;
 		}
 		this.str = list;
 		return list;
 	}
 	public BigInt multiply(BigInt b) throws IOException {
+		Boolean bool1 = this.positive, bool2 = b.positive;
+		this.positive = true;
+		b.positive = true;
 		BigInt product = new BigInt("");
 		for (BigInt i = b; !i.equal(new BigInt("0")); i = i.subtract(new BigInt("1"))) {
 			product = product.add(this);
+		}
+		if (bool1 && !bool2 || !bool1 && bool2) {
+			product.positive = false;
 		}
 		return product;
 	}
@@ -259,5 +281,38 @@ public class BigInt {
 
 	public boolean greaterThan(BigInt b) {
 		return (!lessThan(b) && !equal(b));
+	}
+
+	public static Long randLong() {
+		return (nextLong(new Random(), range) + MIN);
+	}
+
+	public static BigInt randBigInt(int size) throws IOException {
+		String str = "";
+		for (int i = 0; i < size; i++) {
+			str += nextLong(new Random(), 9);
+		}
+		BigInt b = new BigInt(str);
+		if (randBit() == 1) {
+			b.positive = false;
+		}
+		else {
+			b.positive = true;
+		}
+		return b;
+	}
+
+	public static int randBit() {
+		return (int)nextLong(new Random(), 2);
+	}
+
+	private static long nextLong(Random rng, long n) {
+	    long bits, val;
+	    do {
+	    	bits = (rng.nextLong() << 1) >>> 1;
+	    	val = bits % n;
+	    }
+	    while (bits - val + (n - 1) < 0L);
+	   	return val;
 	}
 }
