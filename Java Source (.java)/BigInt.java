@@ -64,9 +64,7 @@ public class BigInt {
 	    while(iter.hasNext()){
 	        s += iter.next();
 	    }
-	    this.str = s;
-	    cleanStr();
-	    return this.str;
+	    return clean(s);
 	}
 	public Boolean positive = true;
 
@@ -209,14 +207,34 @@ public class BigInt {
 			list.removeFirst();
 		}
 	}
+	private String clean(String s) {
+		while ((s.length() > 1 && s.charAt(0) == '0') || (s.length() > 2 && s.charAt(0) == '-') && s.charAt(1) == '0') {
+			if (s.charAt(0) == '0' && s.length() > 0) {
+				s = s.substring(1, s.length());
+			}
+			else if (s.charAt(0) == '-' && s.charAt(1) == '0' && s.length() > 1) {
+				s = '-' + s.substring(2, s.length());
+			}
+		}
+		if (s.equals("-0")) {
+			s = "0";
+		}
+		return s;
+	}
 	private String cleanStr() {
 		String list = this.str;
 		Boolean negative = false;
 		if (list.length() > 0 && list.charAt(0) == '-') {
 			negative = true;
 		}
-		while ((list.length() > 1 && list.charAt(0) == '0') || (list.length() > 2 && list.charAt(0) == '-')) {
-			list = list.substring(1, list.length());
+		while ((list.length() > 2 && list.charAt(0) == '0') || (list.length() < 1 && list.charAt(0) == '-')) {
+			if ((list.length() > 2 && list.charAt(1) == '0')) {
+				list = "-" + list.substring(2, list.length());
+			}
+			list = list.substring(2, list.length());
+		}
+		if (negative) {
+			this.str = "-" + list;
 		}
 		this.str = list;
 		return list;
