@@ -72,8 +72,8 @@ public class RSATest {
 		//ThirtyThreeTest();
 
 		System.out.println("\nTest completed successfully! Exiting now!\n\n");
-		BigInt bigassnum = randBigInt(1024);
-		BigInt bigassnum2 = randBigInt(1024);
+		BigInt bigassnum = randBigInt(100000);
+		BigInt bigassnum2 = randBigInt(100000);
 		System.out.println(bigassnum.getStr() + "\n\n" + bigassnum2.getStr() + "\n----------------------------------------------------\n" 
 			+ bigassnum.add(bigassnum2).getStr());
 

@@ -5,25 +5,6 @@ import java.io.*;
 import java.util.Random;
 import java.lang.Math;
 
-/* TODO 
-
-~/Source-Code/Java Source (.java)$ java GCD
--0
--5
-0
-~/Source-Code/Java Source (.java)$ java GCD
--0
-4
--0
-~/Source-Code/Java Source (.java)$ java GCD
--0
--1
-0
-~/Source-Code/Java Source (.java)$ java GCD
--5
--0
-
-*/
 
 public class BigInt {
 
@@ -244,6 +225,32 @@ public class BigInt {
 		this.positive = true;
 		b.positive = true;
 		BigInt product = new BigInt("");
+		Iteartor iterA = this.iterator();
+		Iteartor iterB = b.iterator();
+		LinkedList<Integer> product = new LinnkedList<Integer>();
+		
+		int carry = 0;
+
+		while (iterA.hasNext() && iterB.hasNext()) {
+			int prod = 0;
+			int k = Integer.valueOf((String)iterA.next().toString());
+			String pStr = "";
+			for (int i = 0; i < b.length(); i++) {
+				int p = Integer.valueOf((String)iterB.next().toString());
+
+				// last digit
+				int lastDigit = Integer.valueOf( p * k ).toString().getCharAt(1);
+
+				if (lastDigit + carry < BASE) {
+					pStr += (lastDigit + carry);
+				}
+
+				// carry
+				int firstDigit = Integer.valueOf( p * k ).toString().getCharAt(0);
+				carry = firstDigit;
+
+			}
+		}
 		for (BigInt i = b; !i.equal(new BigInt("0")); i = i.subtract(new BigInt("1"))) {
 			product = product.add(this);
 		}
